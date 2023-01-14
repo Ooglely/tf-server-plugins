@@ -10,12 +10,12 @@ static char server_password[16];
 static char runner_steam_id[20] = "";
 static char runner_discord_id[30] = "";
 
-public Plugin myinfo =
+public Plugin myinfo = 
 {
-	name = "Gamemode Menu",
-	author = "oog | tf.oog.pw",
-	description = "",
-	version = "1.0.0",
+	name = "Gamemode Menu", 
+	author = "oog | tf.oog.pw", 
+	description = "", 
+	version = "1.0.0", 
 	url = "https://github.com/Ooglely/tf-server-plugins"
 };
 
@@ -44,212 +44,212 @@ public void OnMapStart()
 
 public int GamemodeHandler(Menu menu, MenuAction action, int param1, int param2)
 {
-	switch(action)
+	switch (action)
 	{
 		case MenuAction_Display:
 		{
-		    Panel panel = view_as<Panel>(param2);
-		    panel.SetTitle("Select Gamemode");
+			Panel panel = view_as<Panel>(param2);
+			panel.SetTitle("Select Gamemode");
 		}
 		
 		case MenuAction_Select:
 		{
-      		char selection[32];
-      		menu.GetItem(param2, selection, sizeof(selection));
-      		
-      		if (StrEqual(selection, "Highlander"))
-      		{
-      			Display_HighlanderMenu(param1);
-      		}
-      		else if (StrEqual(selection, "Sixes"))
-      		{
-      			Display_SixesMenu(param1);
-      		}
-      		else if (StrEqual(selection, "Ultiduo"))
-      		{
-      			Display_UltiduoMenu(param1);
-      		}
-      		else if (StrEqual(selection, "MGE"))
-      		{
-      			gm_generate_password.SetInt(0, false, false);
-      			ServerCommand("exec oog_mge");
-      			ServerCommand("changelevel mge_chillypunch_final4_fix2");
-      			gm_config.SetString("oog_mge");
-      		}
-    	}
-    	
-    	case MenuAction_End:
-    	{
-    		delete menu;
-    	}
-    	
-    	case MenuAction_DrawItem:
-    	{
-      		int style;
-      		char info[32];
-      		menu.GetItem(param2, info, sizeof(info), style);
- 
-      		return style;
-    	}
-    	
-    	case MenuAction_DisplayItem:
-    	{
-      		char info[32];
-      		menu.GetItem(param2, info, sizeof(info));
-    	}
+			char selection[32];
+			menu.GetItem(param2, selection, sizeof(selection));
+			
+			if (StrEqual(selection, "Highlander"))
+			{
+				Display_HighlanderMenu(param1);
+			}
+			else if (StrEqual(selection, "Sixes"))
+			{
+				Display_SixesMenu(param1);
+			}
+			else if (StrEqual(selection, "Ultiduo"))
+			{
+				Display_UltiduoMenu(param1);
+			}
+			else if (StrEqual(selection, "MGE"))
+			{
+				gm_generate_password.SetInt(0, false, false);
+				ServerCommand("exec oog_mge");
+				ServerCommand("changelevel mge_chillypunch_final4_fix2");
+				gm_config.SetString("oog_mge");
+			}
+		}
+		
+		case MenuAction_End:
+		{
+			delete menu;
+		}
+		
+		case MenuAction_DrawItem:
+		{
+			int style;
+			char info[32];
+			menu.GetItem(param2, info, sizeof(info), style);
+			
+			return style;
+		}
+		
+		case MenuAction_DisplayItem:
+		{
+			char info[32];
+			menu.GetItem(param2, info, sizeof(info));
+		}
 	}
 	return 0;
 }
 
 public int HLMapMenuHandler(Menu menu, MenuAction action, int param1, int param2)
 {
-	switch(action)
+	switch (action)
 	{
 		case MenuAction_Display:
 		{
-		    Panel panel = view_as<Panel>(param2);
-		    panel.SetTitle("Select Map");
+			Panel panel = view_as<Panel>(param2);
+			panel.SetTitle("Select Map");
 		}
 		
 		case MenuAction_Select:
 		{
-      		char selection[32];
-      		menu.GetItem(param2, selection, sizeof(selection));
-      		
-      		char currentMap[60];
-      		
-      		GetCurrentMap(currentMap, sizeof(currentMap));
-      		
-      		if (StrContains(currentMap, "mge_") != -1)
-      		{
-      			gm_generate_password.SetInt(1, false, false);
-      			SaveClientSteamID(param1);
-      			KickClient(param1, "Connect should be DM'd to you on Discord");
-      			ServerCommand("kickall \"Server switching to a scrim setup. Ask the person running the scrim for the new connect\"");
-      		}
-      		else
-      		{
-      			gm_generate_password.SetInt(0, false, false);
-      		}
-      		
-      		if (StrContains(selection, "koth_"))
-      		{
-      			ServerCommand("exec oog_HL_scrim_koth");
-      			ServerCommand("exec rgl_HL_koth_bo5");
-      			gm_config.SetString("rgl_HL_koth_bo5");
-      			ServerCommand("changelevel %s", selection);
-      		}
-      		else
-      		{
-      			ServerCommand("exec oog_HL_scrim_pl");
-      			gm_config.SetString("rgl_HL_stopwatch");
-      			ServerCommand("changelevel %s", selection);
-      		}
-    	}
-    	
-    	case MenuAction_End:
-    	{
-    		delete menu;
-    	}
+			char selection[32];
+			menu.GetItem(param2, selection, sizeof(selection));
+			
+			char currentMap[60];
+			
+			GetCurrentMap(currentMap, sizeof(currentMap));
+			
+			if (StrContains(currentMap, "mge_") != -1)
+			{
+				gm_generate_password.SetInt(1, false, false);
+				SaveClientSteamID(param1);
+				KickClient(param1, "Connect should be DM'd to you on Discord");
+				ServerCommand("kickall \"Server switching to a scrim setup. Ask the person running the scrim for the new connect\"");
+			}
+			else
+			{
+				gm_generate_password.SetInt(0, false, false);
+			}
+			
+			if (StrContains(selection, "koth_"))
+			{
+				ServerCommand("exec oog_HL_scrim_koth");
+				ServerCommand("exec rgl_HL_koth_bo5");
+				gm_config.SetString("rgl_HL_koth_bo5");
+				ServerCommand("changelevel %s", selection);
+			}
+			else
+			{
+				ServerCommand("exec oog_HL_scrim_pl");
+				gm_config.SetString("rgl_HL_stopwatch");
+				ServerCommand("changelevel %s", selection);
+			}
+		}
+		
+		case MenuAction_End:
+		{
+			delete menu;
+		}
 	}
 	return 0;
 }
 
 public int SixesMapMenuHandler(Menu menu, MenuAction action, int param1, int param2)
 {
-	switch(action)
+	switch (action)
 	{
 		case MenuAction_Display:
 		{
-		    Panel panel = view_as<Panel>(param2);
-		    panel.SetTitle("Select Map");
+			Panel panel = view_as<Panel>(param2);
+			panel.SetTitle("Select Map");
 		}
 		
 		case MenuAction_Select:
 		{
-      		char selection[32];
-      		menu.GetItem(param2, selection, sizeof(selection));
-      		
-      		char currentMap[60];
-      		
-      		GetCurrentMap(currentMap, sizeof(currentMap));
-      		
-      		if (StrContains(currentMap, "mge_") != -1)
-      		{
-      			gm_generate_password.SetInt(1, false, false);
-      			SaveClientSteamID(param1);
-      			KickClient(param1, "Connect should be DM'd to you on Discord");
-      			ServerCommand("kickall \"Server switching to a scrim setup. Ask the person running the scrim for the new connect\"");
-      		}
-      		else
-      		{
-      			gm_generate_password.SetInt(0, false, false);
-      		}
-      		
-      		if (StrContains(selection, "koth_") != -1)
-      		{
-      			ServerCommand("exec oog_6s_scrim_koth");
-      			ServerCommand("exec rgl_6s_koth_bo5");
-      			gm_config.SetString("rgl_6s_koth_bo5");
-      			ServerCommand("changelevel %s", selection);
-      		}
-      		else
-      		{
-      			ServerCommand("exec oog_6s_scrim_5cp");
-      			ServerCommand("exec rgl_6s_5cp_scrim");
-      			gm_config.SetString("rgl_6s_5cp_scrim");
-      			ServerCommand("changelevel %s", selection);
-      		}
-    	}
-    	
-    	case MenuAction_End:
-    	{
-    		delete menu;
-    	}
+			char selection[32];
+			menu.GetItem(param2, selection, sizeof(selection));
+			
+			char currentMap[60];
+			
+			GetCurrentMap(currentMap, sizeof(currentMap));
+			
+			if (StrContains(currentMap, "mge_") != -1)
+			{
+				gm_generate_password.SetInt(1, false, false);
+				SaveClientSteamID(param1);
+				KickClient(param1, "Connect should be DM'd to you on Discord");
+				ServerCommand("kickall \"Server switching to a scrim setup. Ask the person running the scrim for the new connect\"");
+			}
+			else
+			{
+				gm_generate_password.SetInt(0, false, false);
+			}
+			
+			if (StrContains(selection, "koth_") != -1)
+			{
+				ServerCommand("exec oog_6s_scrim_koth");
+				ServerCommand("exec rgl_6s_koth_bo5");
+				gm_config.SetString("rgl_6s_koth_bo5");
+				ServerCommand("changelevel %s", selection);
+			}
+			else
+			{
+				ServerCommand("exec oog_6s_scrim_5cp");
+				ServerCommand("exec rgl_6s_5cp_scrim");
+				gm_config.SetString("rgl_6s_5cp_scrim");
+				ServerCommand("changelevel %s", selection);
+			}
+		}
+		
+		case MenuAction_End:
+		{
+			delete menu;
+		}
 	}
 	return 0;
 }
 
 public int UltiduoMapMenuHandler(Menu menu, MenuAction action, int param1, int param2)
 {
-	switch(action)
+	switch (action)
 	{
 		case MenuAction_Display:
 		{
-		    Panel panel = view_as<Panel>(param2);
-		    panel.SetTitle("Select Map");
+			Panel panel = view_as<Panel>(param2);
+			panel.SetTitle("Select Map");
 		}
 		
 		case MenuAction_Select:
 		{
-      		char selection[32];
-      		menu.GetItem(param2, selection, sizeof(selection));
-      		
-      		char currentMap[60];
-      		GetCurrentMap(currentMap, sizeof(currentMap));
-      		
-      		if (StrContains(currentMap, "mge_") != -1)
-      		{
-      			gm_generate_password.SetInt(1, false, false);
-      			SaveClientSteamID(param1);
-      			KickClient(param1, "Connect should be DM'd to you on Discord");
-      			ServerCommand("kickall \"Server switching to a scrim setup. Ask the person running the scrim for the new connect\"");
-      		}
-      		else
-      		{
-      			gm_generate_password.SetInt(0, false, false);
-      		}
-      		
-      		ServerCommand("exec oog_UD");
-  			ServerCommand("exec ugc_UD_ultiduo");
-  			gm_config.SetString("ugc_UD_ultiduo");
-  			ServerCommand("changelevel %s", selection);
-    	}
-    	
-    	case MenuAction_End:
-    	{
-    		delete menu;
-    	}
+			char selection[32];
+			menu.GetItem(param2, selection, sizeof(selection));
+			
+			char currentMap[60];
+			GetCurrentMap(currentMap, sizeof(currentMap));
+			
+			if (StrContains(currentMap, "mge_") != -1)
+			{
+				gm_generate_password.SetInt(1, false, false);
+				SaveClientSteamID(param1);
+				KickClient(param1, "Connect should be DM'd to you on Discord");
+				ServerCommand("kickall \"Server switching to a scrim setup. Ask the person running the scrim for the new connect\"");
+			}
+			else
+			{
+				gm_generate_password.SetInt(0, false, false);
+			}
+			
+			ServerCommand("exec oog_UD");
+			ServerCommand("exec ugc_UD_ultiduo");
+			gm_config.SetString("ugc_UD_ultiduo");
+			ServerCommand("changelevel %s", selection);
+		}
+		
+		case MenuAction_End:
+		{
+			delete menu;
+		}
 	}
 	return 0;
 }
@@ -264,7 +264,7 @@ public Action Command_GamemodeMenu(int client, int args)
 	menu.AddItem("MGE", "MGE");
 	menu.ExitButton = true;
 	menu.Display(client, 20);
- 
+	
 	return Plugin_Handled;
 }
 
@@ -274,7 +274,7 @@ void Display_HighlanderMenu(int client)
 	menu.SetTitle("%s", "Menu Title", LANG_SERVER);
 	
 	AddMapsToMenu(menu, "addons/sourcemod/configs/gamemode-menu/highlander_maps.txt");
-
+	
 	menu.ExitButton = true;
 	menu.Display(client, 20);
 }
@@ -285,7 +285,7 @@ void Display_SixesMenu(int client)
 	menu.SetTitle("%s", "Menu Title", LANG_SERVER);
 	
 	AddMapsToMenu(menu, "addons/sourcemod/configs/gamemode-menu/sixes_maps.txt");
-
+	
 	menu.ExitButton = true;
 	menu.Display(client, 20);
 }
@@ -296,7 +296,7 @@ void Display_UltiduoMenu(int client)
 	menu.SetTitle("%s", "Menu Title", LANG_SERVER);
 	
 	AddMapsToMenu(menu, "addons/sourcemod/configs/gamemode-menu/ultiduo_maps.txt");
-
+	
 	menu.ExitButton = true;
 	menu.Display(client, 20);
 }
@@ -311,12 +311,12 @@ static char GeneratePassword(char[] output)
 {
 	char choices[] = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	
-    for (new i = 0; i < 12; i++)
-    {
-        output[i] = choices[GetRandomInt(0, 62)];
-    }
-    
-    return output[16];
+	for (new i = 0; i < 12; i++)
+	{
+		output[i] = choices[GetRandomInt(0, 62)];
+	}
+	
+	return output[16];
 }
 
 public SaveClientSteamID(int client)
@@ -331,7 +331,7 @@ static void SendConnectDM()
 	Database db = SQL_Connect("gamemode-menu", false, db_error, sizeof(db_error));
 	if (db == null)
 	{
-	    PrintToServer("Could not connect: %s", db_error);
+		PrintToServer("Could not connect: %s", db_error);
 	}
 	else
 	{
@@ -344,77 +344,77 @@ static void SendConnectDM()
 	DBResultSet query = SQL_Query(db, query_command);
 	if (query == null)
 	{
-	    char q_error[255];
-	    SQL_GetError(db, q_error, sizeof(q_error));
-	    PrintToServer("Failed to query (error: %s)", q_error);
-	} 
+		char q_error[255];
+		SQL_GetError(db, q_error, sizeof(q_error));
+		PrintToServer("Failed to query (error: %s)", q_error);
+	}
 	else if (query.RowCount == 0)
-    {
-        PrintToServer("Failed to query: 0 rows");
-    }
+	{
+		PrintToServer("Failed to query: 0 rows");
+	}
 	else
 	{
-	 	while (SQL_FetchRow(query))
-	    {
-	    	PrintToServer("Fetched row");
-	        query.FetchString(0, runner_discord_id, sizeof(runner_discord_id));
-	        PrintToServer("Name \"%s\" was found.", runner_discord_id);
-	        
-	        JSONObject ServerDM = new JSONObject();
-    
-		    ServerDM.SetString("discordID", runner_discord_id);
-		    
-		    PrintToServer("Server password is currently: %s", server_password);
-		    
-		    char connect_command[255];
-		    Format(connect_command, sizeof(connect_command), "connect ip.oog.pw; password %s", server_password);
-		    ServerDM.SetString("connectCommand", connect_command);
+		while (SQL_FetchRow(query))
+		{
+			PrintToServer("Fetched row");
+			query.FetchString(0, runner_discord_id, sizeof(runner_discord_id));
+			PrintToServer("Name \"%s\" was found.", runner_discord_id);
+			
+			JSONObject ServerDM = new JSONObject();
+			
+			ServerDM.SetString("discordID", runner_discord_id);
+			
+			PrintToServer("Server password is currently: %s", server_password);
+			
+			char connect_command[255];
+			Format(connect_command, sizeof(connect_command), "connect ip.oog.pw; password %s", server_password);
+			ServerDM.SetString("connectCommand", connect_command);
+			
+			HTTPRequest connectPost = new HTTPRequest("https://api.oog.pw/api/send_connect");
+			connectPost.Post(ServerDM, ConnectSent);
+			
+			delete ServerDM;
+		}
 		
-		    HTTPRequest connectPost = new HTTPRequest("https://api.oog.pw/api/send_connect");
-		    connectPost.Post(ServerDM, ConnectSent);
-		
-		    delete ServerDM;
-	    }
-
-	    delete query;
+		delete query;
 	}
 }
 
 static void ConnectSent(HTTPResponse response, any value)
 {
-    PrintToServer("Sent request to bot: %s", runner_discord_id);
-} 
- 
+	PrintToServer("Sent request to bot: %s", runner_discord_id);
+}
+
 void AddMapsToMenu(Menu menu, char[] map_list_file)
 {
 	File file = OpenFile(map_list_file, "rt");
 	
 	char mapname[255];
-    while (!file.EndOfFile() && file.ReadLine(mapname, sizeof(mapname)))
-    {
-        if (mapname[0] == ';' || !IsCharAlpha(mapname[0]))
-        {
-            continue;
-        }
- 
-        int len = strlen(mapname);
-        for (int i = 0; i < len; i++)
-        {
-            if (IsCharSpace(mapname[i]))
-            {
-                mapname[i] = '\0';
-                break;
-            }
-        }
- 
-        if (!IsMapValid(mapname))
-        {
-            continue;
-        }
- 
-        menu.AddItem(mapname, mapname);
-    }
- 
-    /* Make sure we close the file! */
-    file.Close();
-}
+	while (!file.EndOfFile() && file.ReadLine(mapname, sizeof(mapname)))
+	{
+		if (mapname[0] == ';' || !IsCharAlpha(mapname[0]))
+		{
+			continue;
+		}
+		
+		int len = strlen(mapname);
+		for (int i = 0; i < len; i++)
+		{
+			if (IsCharSpace(mapname[i]))
+			{
+				mapname[i] = '\0';
+				break;
+			}
+		}
+		
+		if (!IsMapValid(mapname))
+		{
+			continue;
+		}
+		
+		menu.AddItem(mapname, mapname);
+	}
+	
+	/* Make sure we close the file! */
+	file.Close();
+} 
