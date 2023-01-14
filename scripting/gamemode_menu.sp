@@ -74,6 +74,7 @@ public int GamemodeHandler(Menu menu, MenuAction action, int param1, int param2)
       			gm_generate_password.SetInt(0, false, false);
       			ServerCommand("exec oog_mge");
       			ServerCommand("changelevel mge_chillypunch_final4_fix2");
+      			gm_config.SetString("oog_mge");
       		}
     	}
     	
@@ -107,7 +108,7 @@ public int HLMapMenuHandler(Menu menu, MenuAction action, int param1, int param2
 		case MenuAction_Display:
 		{
 		    Panel panel = view_as<Panel>(param2);
-		    panel.SetTitle("Select Gamemode");
+		    panel.SetTitle("Select Map");
 		}
 		
 		case MenuAction_Select:
@@ -161,7 +162,7 @@ public int SixesMapMenuHandler(Menu menu, MenuAction action, int param1, int par
 		case MenuAction_Display:
 		{
 		    Panel panel = view_as<Panel>(param2);
-		    panel.SetTitle("Select Gamemode");
+		    panel.SetTitle("Select Map");
 		}
 		
 		case MenuAction_Select:
@@ -216,7 +217,7 @@ public int UltiduoMapMenuHandler(Menu menu, MenuAction action, int param1, int p
 		case MenuAction_Display:
 		{
 		    Panel panel = view_as<Panel>(param2);
-		    panel.SetTitle("Select Gamemode");
+		    panel.SetTitle("Select Map");
 		}
 		
 		case MenuAction_Select:
@@ -225,7 +226,6 @@ public int UltiduoMapMenuHandler(Menu menu, MenuAction action, int param1, int p
       		menu.GetItem(param2, selection, sizeof(selection));
       		
       		char currentMap[60];
-      		
       		GetCurrentMap(currentMap, sizeof(currentMap));
       		
       		if (StrContains(currentMap, "mge_") != -1)
