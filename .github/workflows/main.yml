@@ -20,13 +20,13 @@ jobs:
         uses: rumblefrog/setup-sp@master
         with:
           version: "1.10.x"
-          version-file: ./scripting/tf-server-plugins.sp
+          version-file: ./scripting/gamemode_menu.sp
 
       - name: Compile plugins
         run: |
           mkdir plugins
           cd scripting
-          spcomp -E -w234 -O2 -v2 -i"include" -o"../plugins/tf-server-plugins.smx" tf-server-plugins.sp
+          spcomp -E -w234 -O2 -v2 -i"include" -o"../plugins/gamemode_menu.smx" gamemode_menu.sp
           echo "===OUT FILES==="
           cd ../plugins
           ls
@@ -44,7 +44,7 @@ jobs:
       - name: Zip output
         run: |
           cd plugins
-          zip -qq -r tf-server-plugins-${{ steps.setup_sp.outputs.plugin-version }}.zip tf-server-plugins.smx
+          zip -qq -r tf-server-plugins-${{ steps.setup_sp.outputs.plugin-version }}.zip gamemode_menu.smx
         working-directory: ${{ env.SCRIPTS_PATH }}
 
       - name: Create Release
@@ -54,7 +54,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: v${{ steps.setup_sp.outputs.plugin-version }}
-          artifacts: "./plugins/tf-server-plugins-${{ steps.setup_sp.outputs.plugin-version }}.zip"
+          artifacts: "./plugins/gamemode_menu-${{ steps.setup_sp.outputs.plugin-version }}.zip"
           body: ${{ steps.changelog.outputs.changes }}
           draft: false
           allowUpdates: true
