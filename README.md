@@ -5,7 +5,7 @@
 
 
 ## Gamemode Menu | v.1.0.0 ##
-Adds a command that opens a menu to select a gamemode and map, then changes the server to the correct map and config. 
+Adds a command that opens a menu to select a gamemode and map, then changes the server to the correct map and config.<br>Requires [sm-ripext](https://github.com/ErikMinekus/sm-ripext).
 - Grabs the current 6's and Highlander competitive map pool from a mapcycle file
 - Generates a random password for scrims and deactivates the password when switched back to MGE
 - Sends connect command to user on Discord
