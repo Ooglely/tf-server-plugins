@@ -15,7 +15,7 @@ public Plugin myinfo =
 	name = "Gamemode Menu", 
 	author = "oog | tf.oog.pw", 
 	description = "", 
-	version = "1.0.0", 
+	version = "1.0.1", 
 	url = "https://github.com/Ooglely/tf-server-plugins"
 };
 
@@ -311,7 +311,7 @@ static char GeneratePassword(char[] output)
 {
 	char choices[] = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	
-	for (new i = 0; i < 12; i++)
+	for (new i = 0; i < 16; i++)
 	{
 		output[i] = choices[GetRandomInt(0, 62)];
 	}
