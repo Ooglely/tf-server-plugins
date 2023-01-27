@@ -6,16 +6,16 @@
 
 ConVar gm_config;
 ConVar gm_generate_password;
-static char server_password[16];
-static char runner_steam_id[20] = "";
-static char runner_discord_id[30] = "";
+ConVar gm_cvPassword;
+char runner_steam_id[20] = "";
+char runner_discord_id[30] = "";
 
 public Plugin myinfo = 
 {
 	name = "Gamemode Menu", 
 	author = "oog | tf.oog.pw", 
 	description = "", 
-	version = "1.0.1", 
+	version = "1.1.0", 
 	url = "https://github.com/Ooglely/tf-server-plugins"
 };
 
@@ -39,7 +39,7 @@ public void OnMapStart()
 		char[] password = new char[16];
 		GeneratePassword(password);
 		ServerCommand("sv_password %s", password);
-		SendConnectDM();
+		SendConnectDM(password);
 		gm_generate_password.SetInt(0);
 	}
 }
@@ -134,7 +134,7 @@ public int HLMapMenuHandler(Menu menu, MenuAction action, int param1, int param2
 				gm_generate_password.SetInt(0, false, false);
 			}
 			
-			if (StrContains(selection, "koth_"))
+			if (StrContains(selection, "koth_") != -1)
 			{
 				ServerCommand("exec oog_HL_scrim_koth");
 				ServerCommand("exec rgl_HL_koth_bo5");
@@ -304,9 +304,16 @@ void Display_UltiduoMenu(int client)
 }
 
 public Action Command_Connect(int client, int args)
-{
+{	
+	char[] server_password = new char[16];
+	gm_cvPassword = FindConVar("sv_password");
+	gm_cvPassword.GetString(server_password, 16);
 	PrintToChat(client, "%s", "Connect for the current server:");
 	PrintToChat(client, "connect ip.oog.pw; password %s", server_password);
+	
+	char[] map_config = new char[32];
+	gm_config.GetString(map_config, 32);
+	PrintToChat(client, "Config is: %s", map_config);
 
 	return Plugin_Handled;
 }
@@ -330,7 +337,7 @@ public SaveClientSteamID(int client)
 	PrintToServer("Runner Steam ID saved: %s", runner_steam_id);
 }
 
-static void SendConnectDM()
+static void SendConnectDM(char[] password)
 {
 	char db_error[255];
 	Database db = SQL_Connect("gamemode-menu", false, db_error, sizeof(db_error));
@@ -369,10 +376,10 @@ static void SendConnectDM()
 			
 			ServerDM.SetString("discordID", runner_discord_id);
 			
-			PrintToServer("Server password is currently: %s", server_password);
+			PrintToServer("Server password is currently: %s", password);
 			
 			char connect_command[255];
-			Format(connect_command, sizeof(connect_command), "connect ip.oog.pw; password %s", server_password);
+			Format(connect_command, sizeof(connect_command), "connect ip.oog.pw; password %s", password);
 			ServerDM.SetString("connectCommand", connect_command);
 			
 			HTTPRequest connectPost = new HTTPRequest("https://api.oog.pw/api/send_connect");
@@ -421,4 +428,4 @@ void AddMapsToMenu(Menu menu, char[] map_list_file)
 	}
 	
 	file.Close();
-} 
+}
