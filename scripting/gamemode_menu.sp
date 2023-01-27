@@ -30,13 +30,15 @@ public void OnPluginStart()
 
 public void OnMapStart()
 {
-	ServerCommand("exec %s", FindConVar("gm_config"));
+	char[] map_config = new char[32];
+	gm_config.GetString(map_config, 32);
+	ServerCommand("exec %s", map_config);
 	
 	if (gm_generate_password.IntValue == 1)
 	{
-		server_password = "";
-		GeneratePassword(server_password);
-		ServerCommand("sv_password %s", server_password);
+		char[] password = new char[16];
+		GeneratePassword(password);
+		ServerCommand("sv_password %s", password);
 		SendConnectDM();
 		gm_generate_password.SetInt(0);
 	}
@@ -305,18 +307,21 @@ public Action Command_Connect(int client, int args)
 {
 	PrintToChat(client, "%s", "Connect for the current server:");
 	PrintToChat(client, "connect ip.oog.pw; password %s", server_password);
+
+	return Plugin_Handled;
 }
 
-static char GeneratePassword(char[] output)
+public char GeneratePassword(char[] pass)
 {
 	char choices[] = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	
 	for (new i = 0; i < 16; i++)
 	{
-		output[i] = choices[GetRandomInt(0, 62)];
+		pass[i] = choices[GetRandomInt(0, 61)];
 	}
-	
-	return output[16];
+	PrintToServer("Password generated: %s", pass);
+
+	return pass[16];
 }
 
 public SaveClientSteamID(int client)
@@ -415,6 +420,5 @@ void AddMapsToMenu(Menu menu, char[] map_list_file)
 		menu.AddItem(mapname, mapname);
 	}
 	
-	/* Make sure we close the file! */
 	file.Close();
 } 
