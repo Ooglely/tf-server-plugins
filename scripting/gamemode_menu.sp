@@ -5,6 +5,7 @@
 #pragma semicolon 1
 
 ConVar gm_config;
+ConVar gm_config_name;
 ConVar gm_generate_password;
 ConVar gm_cvPassword;
 char runner_steam_id[20] = "";
@@ -15,7 +16,7 @@ public Plugin myinfo =
 	name = "Gamemode Menu", 
 	author = "oog | tf.oog.pw", 
 	description = "", 
-	version = "1.1.0", 
+	version = "1.1.2", 
 	url = "https://github.com/Ooglely/tf-server-plugins"
 };
 
@@ -24,15 +25,20 @@ public void OnPluginStart()
 	RegAdminCmd("sm_gamemode", Command_GamemodeMenu, ADMFLAG_ROOT);
 	RegAdminCmd("sm_connect", Command_Connect, ADMFLAG_ROOT);
 	
-	gm_config = CreateConVar("gm_config", "oog_mge", "Name of config to exec on map start");
+	gm_config = CreateConVar("gm_config", "0", "Enable config execute or not");
+	gm_config_name = CreateConVar("gm_config_name", "oog_mge", "Name of config to exec on map start");
 	gm_generate_password = CreateConVar("gm_generate_password", "0", "Generate a new password on map startup");
 }
 
 public void OnMapStart()
 {
-	char[] map_config = new char[32];
-	gm_config.GetString(map_config, 32);
-	ServerCommand("exec %s", map_config);
+	if (gm_config.IntValue == 1)
+	{
+		char[] map_config = new char[32];
+		gm_config_name.GetString(map_config, 32);
+		ServerCommand("exec %s", map_config);
+		gm_config.SetInt(0);
+	}
 	
 	if (gm_generate_password.IntValue == 1)
 	{
@@ -74,9 +80,10 @@ public int GamemodeHandler(Menu menu, MenuAction action, int param1, int param2)
 			else if (StrEqual(selection, "MGE"))
 			{
 				gm_generate_password.SetInt(0, false, false);
+				gm_config.SetInt(1, false, false);
 				ServerCommand("exec oog_mge");
 				ServerCommand("changelevel mge_chillypunch_final4_fix2");
-				gm_config.SetString("oog_mge");
+				gm_config_name.SetString("oog_mge");
 			}
 		}
 		
@@ -138,13 +145,16 @@ public int HLMapMenuHandler(Menu menu, MenuAction action, int param1, int param2
 			{
 				ServerCommand("exec oog_HL_scrim_koth");
 				ServerCommand("exec rgl_HL_koth_bo5");
-				gm_config.SetString("rgl_HL_koth_bo5");
+				gm_config.SetInt(1, false, false);
+				gm_config_name.SetString("rgl_HL_koth_bo5");
 				ServerCommand("changelevel %s", selection);
 			}
 			else
 			{
 				ServerCommand("exec oog_HL_scrim_pl");
-				gm_config.SetString("rgl_HL_stopwatch");
+				ServerCommand("exec rgl_HL_stopwatch");
+				gm_config.SetInt(1, false, false);
+				gm_config_name.SetString("rgl_HL_stopwatch");
 				ServerCommand("changelevel %s", selection);
 			}
 		}
@@ -192,14 +202,16 @@ public int SixesMapMenuHandler(Menu menu, MenuAction action, int param1, int par
 			{
 				ServerCommand("exec oog_6s_scrim_koth");
 				ServerCommand("exec rgl_6s_koth_bo5");
-				gm_config.SetString("rgl_6s_koth_bo5");
+				gm_config.SetInt(1, false, false);
+				gm_config_name.SetString("rgl_6s_koth_bo5");
 				ServerCommand("changelevel %s", selection);
 			}
 			else
 			{
 				ServerCommand("exec oog_6s_scrim_5cp");
 				ServerCommand("exec rgl_6s_5cp_scrim");
-				gm_config.SetString("rgl_6s_5cp_scrim");
+				gm_config.SetInt(1, false, false);
+				gm_config_name.SetString("rgl_6s_5cp_scrim");
 				ServerCommand("changelevel %s", selection);
 			}
 		}
